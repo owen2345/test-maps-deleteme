@@ -4,6 +4,8 @@ FROM ruby:2.7.1 AS builder
 RUN apt-get update -yqq && apt-get install -yqq --no-install-recommends \
   apt-transport-https
 
+RUN apt-get install -yqq cron
+
 # Ensure latest packages for Yarn
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
 RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | \

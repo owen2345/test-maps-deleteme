@@ -9,6 +9,8 @@ services:
     stdin_open: true
     tty: true
     command: bash -c 'rails s -p 3001'
+    ports:
+      - ${RAILS_PORT:-3001}:3001
     environment:
       RAILS_ENV: development
     build:
@@ -17,20 +19,28 @@ services:
     volumes:
       - .:/app
       - bundler_gems:/usr/local/bundle/
+    depends_on:
+      - background_service
+
+  background_service:
+    <<: *backend_app
+    ports: []
+    command: bash -c 'bundle exec whenever --update-crontab && sleep infinity'
+    depends_on: []
 
   frontend:
     <<: *backend_app
     environment:
       PORT: 3000
-      RAILS_PORT: 3001
-    command: bash -c 'yarn react-scripts start'
+      RAILS_PORT: ${RAILS_PORT:-3001}
+    ports:
+      - ${PORT:-3000}:3000
+    command: bash -c 'cd frontend/ && yarn react-scripts start'
     volumes:
       - .:/app
       - node_modules:/app/frontend/node_modules
-
-  sidekiq:
-    <<: *backend_app
-    command: bash -c 'bundle exec sidekiq -C config/sidekiq.yml'
+    depends_on:
+      - backend
 
   test:
     <<: *backend_app
