@@ -1,0 +1,39 @@
+version: "3.7"
+
+volumes:
+  bundler_gems:
+  node_modules:
+
+services:
+  backend: &backend_app
+    stdin_open: true
+    tty: true
+    command: bash -c 'rails s -p 3001'
+    environment:
+      RAILS_ENV: development
+    build:
+      context: .
+      target: "development"
+    volumes:
+      - .:/app
+      - bundler_gems:/usr/local/bundle/
+
+  frontend:
+    <<: *backend_app
+    environment:
+      PORT: 3000
+      RAILS_PORT: 3001
+    command: bash -c 'yarn react-scripts start'
+    volumes:
+      - .:/app
+      - node_modules:/app/frontend/node_modules
+
+  sidekiq:
+    <<: *backend_app
+    command: bash -c 'bundle exec sidekiq -C config/sidekiq.yml'
+
+  test:
+    <<: *backend_app
+    environment:
+      RAILS_ENV: test
+    command: bash -c 'bundle exec rspec && rubocop && cd frontend/ && yarn lint'
