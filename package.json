@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@types/google-map-react": "^2.1.2"
+  }
+}

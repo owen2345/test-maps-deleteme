@@ -8,7 +8,7 @@ services:
   backend: &backend_app
     stdin_open: true
     tty: true
-    command: bash -c 'rails s -p 3001'
+    command: bash -c 'rm -f tmp/pids/server.pid || true && rails s -p 3001 -b 0.0.0.0'
     ports:
       - ${RAILS_PORT:-3001}:3001
     environment:
@@ -25,7 +25,7 @@ services:
   background_service:
     <<: *backend_app
     ports: []
-    command: bash -c 'bundle exec whenever --update-crontab && sleep infinity'
+    command: bash -c 'bundle exec whenever --update-crontab --set environment='development' && cron && sleep infinity'
     depends_on: []
 
   frontend:
@@ -35,7 +35,7 @@ services:
       RAILS_PORT: ${RAILS_PORT:-3001}
     ports:
       - ${PORT:-3000}:3000
-    command: bash -c 'cd frontend/ && yarn react-scripts start'
+    command: bash -c 'cd frontend/ && yarn install && yarn react-scripts start'
     volumes:
       - .:/app
       - node_modules:/app/frontend/node_modules

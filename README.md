@@ -1,24 +1,13 @@
-# README
+## TODOS
+- Frontend tests
+- Frontend fix code style
+- Backend fix code style
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Installation
+- `docker-compose up frontend`
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+## Usage
+ - Visit localhost:3000
+ 
+ 
+## Hours dedicated: 5 hours

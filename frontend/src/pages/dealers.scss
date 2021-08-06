@@ -1,0 +1,26 @@
+#dealers_page {
+  max-width: 90%;
+  margin: 0 auto;
+  .list_panel, .map_panel {
+    width: 50%;
+    float: left;
+    li {
+      padding: 8px;
+      cursor: pointer;
+      &.selected {
+        background: #eee;
+      }
+      &:hover {
+        background: #f6f6f6;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 600px)  {
+  #dealers_page {
+    .list_panel, .map_panel {
+      width: 100%;
+    }
+  }
+}
